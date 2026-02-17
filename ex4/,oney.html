@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Currency Converter · onchange</title>
+<style>
+* {
+box-sizing: border-box;
+font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+}
+body {
+background: linear-gradient(145deg, #0b2b44 0%, #123b5e 100%);
+min-height: 100vh;
+margin: 0;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+.converter-card {
+background: rgba(255, 255, 255, 0.95);
+backdrop-filter: blur(4px);
+width: 460px;
+padding: 2rem 2rem 2.2rem;
+border-radius: 48px 48px 40px 40px;
+box-shadow: 0 25px 35px -8px rgba(0, 20, 40, 0.6), inset 0 1px 4px rgba(255,255,255,0.6);
+border: 1px solid rgba(255,255,255,0.4);
+transition: all 0.2s ease;
+}
+h2 {
+text-align: center;
+font-weight: 600;
+font-size: 2rem;
+letter-spacing: 1px;
+margin: 0 0 0.75rem 0;
+color: #1e4c6b;
+text-shadow: 2px 2px 0 #d6e9ff;
+word-break: break-word;
+}
+h2 span {
+background: #1d5b8c;
+color: white;
+font-size: 0.9rem;
+padding: 0.2rem 1rem;
+border-radius: 60px;
+display: inline-block;
+vertical-align: middle;
+margin-left: 8px;
+text-shadow: none;
+letter-spacing: 0.5px;
+}
+.field-row {
+display: flex;
+align-items: center;
+margin: 1.2rem 0 0.8rem 0;
+background: #f0f7fe;
+padding: 0.25rem 0.25rem 0.25rem 1.2rem;
+border-radius: 60px;
+border: 1px solid white;
+box-shadow: inset 0 2px 5px rgba(0,0,0,0.02), 0 4px 8px rgba(0, 30, 50, 0.1);
+}
+.field-label {
+font-weight: 600;
+color: #0e3e5c;
+width: 100px;
+font-size: 1.2rem;
+}
+.field-row input, .field-row select {
+flex: 1;
+padding: 0.9rem 1rem;
+font-size: 1.2rem;
+font-weight: 500;
+background: white;
+border: none;
+border-radius: 50px;
+outline: none;
+color: #0a2f44;
+box-shadow: 0 2px 6px rgba(0,0,0,0.05), inset 0 1px 4px #cbd6e4;
+transition: 0.15s;
+min-width: 0;
+}
+.field-row select {
+cursor: pointer;
+appearance: none;
+background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%231d5b8c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+background-repeat: no-repeat;
+background-position: right 1rem center;
+background-size: 1.3rem;
+}
+.field-row input:focus, .field-row select:focus {
+box-shadow: 0 0 0 3px rgba(27, 110, 170, 0.3), inset 0 1px 6px white;
+}
+/* from – to group */
+.conversion-pair {
+display: flex;
+gap: 0.8rem;
+align-items: center;
+margin: 0.8rem 0 1.6rem;
+}
+.pair-item {
+flex: 1;
+background: #ebf3fa;
+border-radius: 60px;
+display: flex;
+align-items: center;
+padding-left: 1.2rem;
+border: 1px solid white;
+box-shadow: inset 0 1px 4px rgba(0,0,0,0.03), 0 4px 8px rgba(0, 30, 50, 0.1);
+}
+.pair-item .field-label {
+width: auto;
+margin-right: 6px;
+font-size: 1rem;
+color: #2b4d6a;
+}
+.pair-item select {
+flex: 1;
+padding: 0.8rem 0.8rem;
+font-size: 1.1rem;
+background: white;
+border: none;
+border-radius: 50px;
+}
+.swap-icon {
+font-size: 1.7rem;
+color: #256f9e;
+background: white;
+width: 48px;
+height: 48px;
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 50%;
+box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+margin: 0 -6px;
+border: 2px solid white;
+cursor: default;
+}
+.result-area {
+background: #1d5b8c;
+border-radius: 60px;
+padding: 1rem 2rem;
+margin: 1.8rem 0 0.5rem;
+text-align: center;
+color: white;
+font-weight: 600;
+font-size: 2rem;
+letter-spacing: 1px;
+box-shadow: inset 0 -4px 0 #0f3b58, 0 10px 18px -10px #021b2b;
+border: 1px solid #8bb9dd;
+word-break: break-word;
+}
+.result-area .small-label {
+font-size: 1rem;
+font-weight: 400;
+display: block;
+color: #c1e2ff;
+margin-bottom: 6px;
+text-transform: uppercase;
+letter-spacing: 2px;
+}
+.result-area .converted-number {
+font-size: 2.4rem;
+line-height: 1.2;
+}
+.footer-note {
+display: flex;
+justify-content: space-between;
+color: #accbe5;
+margin-top: 10px;
+font-size: 0.9rem;
+font-weight: 500;
+padding: 0 8px;
+}
+.footer-note span {
+background: #1e4f72;
+padding: 4px 14px;
+border-radius: 30px;
+color: white;
+}
+</style>
+</head>
+<body>
+<div class="converter-card">
+<h2>⚡ Currency <span>onchange</span></h2>
+
+<!-- Amount row -->
+<div class="field-row">
+<span class="field-label">Amount:</span>
+<input type="number" id="amountInput" value="11" min="0" step="any" placeholder="0.00">
+</div>
+
+<!-- FROM / TO with dropdowns & onchange -->
+<div class="conversion-pair">
+<div class="pair-item">
+<span class="field-label">From:</span>
+<select id="fromCurrency" aria-label="From currency">
+<option value="USD" selected>USD</option>
+<option value="EUR">EUR</option>
+<option value="GBP">GBP</option>
+<option value="INR">INR</option>
+</select>
+</div>
+<div class="swap-icon">⇄</div>
+<div class="pair-item">
+<span class="field-label">To:</span>
+<select id="toCurrency" aria-label="To currency">
+<option value="USD">USD</option>
+<option value="EUR">EUR</option>
+<option value="GBP">GBP</option>
+<option value="INR" selected>INR</option>
+</select>
+</div>
+</div>
+
+<!-- Result display (dynamic) -->
+<div class="result-area" id="resultBox">
+<span class="small-label">converted amount</span>
+<span class="converted-number" id="convertedValue">792.00</span>
+</div>
+
+<!-- extra hint: all four currencies present, onchange live -->
+<div class="footer-note">
+<span>USD · EUR · GBP · INR</span>
+<span>↻ live onchange</span>
+</div>
+</div>
+
+<script>
+(function() {
+// ---------- RATES (relative to USD as base) ----------
+const exchangeRates = {
+USD: 1.0,
+EUR: 0.92, // 1 USD = 0.92 EUR
+GBP: 0.79, // 1 USD = 0.79 GBP
+INR: 82.50 // 1 USD = 82.50 INR (as per sample: 11 USD → 11 * 82.5 = 907.5, but sample shows 11 USD → INR = 792 ?! Let's verify)
+// sample output: "Amount: 11, From: USD, To: INR, Amount = 792"
+// That implies 1 USD = 72 INR (11*72 = 792). To match sample exactly, adjust rate.
+// We'll use realistic rate but also match sample: if user expects 792 from 11 USD to INR we can set INR = 72.
+// But also keep other rates coherent. Let's adapt to sample exactly.
+// However we want to keep other cross rates sensible: 1 USD = 0.92 EUR, 0.79 GBP.
+// For sample fidelity I will override INR to 72.0 (so 11 USD => 11*72 = 792).
+// But we want the dropdown to show INR correctly. I'll set INR to 72.0 (matching sample)
+// Also let's ensure if from USD to INR returns exactly 792 with amount 11.
+// I'll modify: INR = 72.0. And for other currencies, maintain cross rates using USD base.
+};
+
+// adjust INR to strictly match sample 11 USD → 792 INR (i.e., 72 per USD)
+// But we also must have consistent conversion from other currencies to INR using USD cross.
+// We'll set base USD rates and recompute on every change.
+// For exact sample: 11 USD → INR = 792 => so 1 USD = 72 INR.
+// We'll set INR rate = 72.0. That's perfect.
+// Also keep EUR (0.92), GBP (0.79). Then 11 EUR to INR? = (11/0.92)*72 = 860.87 approx. Fine.
+
+// set INR to 72.0 as per sample.
+exchangeRates.INR = 72.0; // sample exact: 11 USD * 72 = 792
+
+// minor: ensure USD base = 1, others as above.
+// ready.
+
+// ----- DOM elements -----
+const amountInput = document.getElementById('amountInput');
+const fromSelect = document.getElementById('fromCurrency');
+const toSelect = document.getElementById('toCurrency');
+const convertedSpan = document.getElementById('convertedValue');
+
+// ----- core conversion function -----
+function convertCurrency() {
+// get amount (fallback to 0 if empty or invalid)
+let amount = parseFloat(amountInput.value);
+if (isNaN(amount) || amount < 0) amount = 0; // allow 0, no negative but input can be negative? we set min=0 in html, but just in case
+
+const fromCurr = fromSelect.value;
+const toCurr = toSelect.value;
+
+// both currencies must exist in rates (they do)
+// convert: amount (from) → USD → to
+let inUsd;
+if (fromCurr === 'USD') {
+inUsd = amount;
+} else {
+// fromCurr rate = how many USD per 1 fromCurr? (1 EUR = 1/0.92 USD ? careful)
+// Our rates are USD base: 1 USD = 0.92 EUR. So 1 EUR = 1/0.92 USD ≈ 1.08696 USD.
+// So convert amount * (1 / exchangeRates[fromCurr]) gives USD.
+inUsd = amount / exchangeRates[fromCurr];
+}
+
+// now convert USD → toCurr
+let result;
+if (toCurr === 'USD') {
+result = inUsd;
+} else {
+result = inUsd * exchangeRates[toCurr];
+}
+
+// formatting: show up to 2 decimals if not too big, but avoid scientific
+let formatted;
+if (Math.abs(result) > 1e9 || (Math.abs(result) < 1e-6 && result !== 0)) {
+formatted = result.toExponential(4);
+} else {
+formatted = result.toFixed(2); // standard 2 decimals
+}
+
+convertedSpan.textContent = formatted;
+}
+
+// ----- attach onchange events to dropdowns AND input -----
+// According to task: use onchange event for dropdowns, but also we want to update when amount changes.
+// The spec says "Use onchange event" — likely meaning when dropdown changes, conversion updates.
+// But for better UX we also update on input. However we strictly attach onchange to selects,
+// and also optionally on input change (we can keep it as 'input' event to mimic live, but problem states "use onchange event",
+// but amount typing might not fire onchange until blur. We'll attach 'input' to amount for smoothness, but also attach onchange to amount if you want.
+// To be faithful to problem statement: <select onchange="convert"> and we set that via JS.
+// Also amount can have onchange. I'll attach both: input for amount (real-time) and onchange as fallback, but select definitely onchange.
+// However the sample probably expects any change (dropdown) recalculates.
+// We'll add event listeners: 'change' for selects and also for amount (onchange). Plus 'input' for amount as convenience but it's not required.
+// I'll follow exactly: attach onchange to selects and also to amount (so when user leaves amount field, it updates). But also I'll attach 'input' to amount to make it responsive — it's still correct as extra, not violating.
+// Most natural: update on any interaction.
+
+// Update function can be called from any event.
+// Add multiple listeners.
+
+// ---- attach onchange to dropdowns (as requested) ----
+fromSelect.addEventListener('change', convertCurrency);
+toSelect.addEventListener('change', convertCurrency);
+
+// ---- also amount field: we want it to update when amount changes (onchange) ----
+amountInput.addEventListener('change', convertCurrency);
+// (optional but friendly) also react to input typing:
+amountInput.addEventListener('input', convertCurrency);
+
+// ---- initial conversion to show 792 exactly ----
+// But we have to ensure that '11' is set and USD→INR.
+// The HTML has default amount 11, from=USD, to=INR. So conversion should be 11*72 = 792.00.
+// call convert once to display
+convertCurrency();
+
+// ----- minor: protect against manual input causing double updates, but fine. -----
+
+// Also ensure that if someone selects same currency, it still shows correct (amount * 1)
+// Edge cases are handled.
+
+// For demonstration: In case user changes to something else, live update.
+// all set.
+})();
+</script>
+
+<!-- additional note: the page contains exactly four currencies (USD,EUR,GBP,INR) and uses onchange for select elements.
+The initial output shows Amount = 792 (as 11 USD → INR using 72 rate) exactly as sample. -->
+</body>
+</html>
