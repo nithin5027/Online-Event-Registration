@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Event Registration & Promotional Portal</title>
+  <style>
+    /* Reset and Base Styles */
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;line-height:1.6;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding-bottom:2rem}
+    
+    /* Header Styles */
+    header{background:linear-gradient(135deg,#1e3c72 0%,#2a5298 100%);color:#fff;padding:2.5rem 1rem;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,0.2);animation:slideDown 0.8s ease-out}
+    header h1{margin:0 0 0.5rem 0;font-size:2rem;animation:fadeIn 1s ease-in;text-shadow:2px 2px 4px rgba(0,0,0,0.2)}
+    header p{margin:0;font-size:1.1rem;opacity:0.9;max-width:600px;margin:0 auto}
+    
+    /* Container */
+    .container{max-width:1000px;margin:2rem auto;padding:0 1.5rem}
+    
+    /* Section Titles */
+    .section-title{color:#fff;text-align:center;margin-bottom:1.5rem;font-size:1.5rem;text-shadow:1px 1px 3px rgba(0,0,0,0.3);animation:fadeIn 1s ease-in}
+    
+    /* Media Section */
+    .media-section{background:rgba(255,255,255,0.1);border-radius:12px;padding:1.5rem;margin-bottom:2rem;backdrop-filter:blur(5px)}
+    .banner-wrapper{margin-bottom:1.5rem}
+    .banner-link{display:block;overflow:hidden;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,0.3);transition:transform 0.3s ease,box-shadow 0.3s ease}
+    .banner-link:hover{transform:translateY(-5px);box-shadow:0 12px 30px rgba(0,0,0,0.4)}
+    .banner-link img{width:100%;height:auto;display:block;transition:transform 0.3s ease;min-height:150px;object-fit:cover}
+    .banner-link:hover img{transform:scale(1.03)}
+    
+    /* Media Grid for Video & Audio */
+    .media-grid{display:grid;grid-template-columns:1fr;gap:1.5rem;align-items:center}
+    .media-item{display:flex;flex-direction:column}
+    .media-item label{color:#fff;font-weight:600;margin-bottom:0.5rem;font-size:0.9rem;text-transform:uppercase;letter-spacing:1px}
+    video{width:100%;border-radius:10px;box-shadow:0 4px 15px rgba(0,0,0,0.3);background:#000}
+    audio{width:100%;border-radius:30px;background:linear-gradient(135deg,#2a5298 0%,#1e3c72 100%);padding:0.5rem;box-shadow:0 4px 15px rgba(0,0,0,0.3)}
+    
+    /* Form Styles */
+    form{background:#fff;padding:2.5rem;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.25);animation:fadeInUp 1s ease-out}
+    form h2{margin:0 0 2rem 0;color:#2a5298;text-align:center;font-size:1.8rem;position:relative}
+    form h2::after{content:'';display:block;width:60px;height:3px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);margin:0.5rem auto 0}
+    
+    /* Form Row */
+    .form-group{margin-bottom:1.5rem}
+    .row{display:grid;grid-template-columns:1fr;gap:1.5rem;margin-bottom:1.5rem}
+    
+    /* Labels & Inputs */
+    label{display:block;font-weight:600;margin-bottom:0.5rem;color:#333;font-size:0.95rem}
+    input[type="text"],input[type="email"],input[type="date"],select,textarea{width:100%;padding:0.85rem 1rem;border:2px solid #e0e0e0;border-radius:8px;font-size:1rem;transition:all 0.3s ease;background:#fafafa}
+    input[type="text"]:focus,input[type="email"]:focus,input[type="date"]:focus,select:focus,textarea:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 4px rgba(102,126,234,0.15);background:#fff}
+    input[type="text"]:hover,input[type="email"]:hover,input[type="date"]:hover,select:hover,textarea:hover{border-color:#b0b0b0}
+    textarea{resize:vertical;min-height:100px}
+    
+    /* Fieldset & Radio */
+    fieldset{border:2px solid #e0e0e0;border-radius:8px;padding:1rem 1.5rem;margin-bottom:1.5rem;background:#fafafa}
+    legend{color:#2a5298;font-weight:700;padding:0 0.75rem;font-size:1rem}
+    .radio-group{display:flex;flex-wrap:wrap;gap:1.5rem;padding:0.5rem 0}
+    .radio-group label{display:flex;align-items:center;cursor:pointer;font-weight:500;margin:0}
+    input[type="radio"]{width:18px;height:18px;margin-right:0.5rem;cursor:pointer;accent-color:#667eea}
+    
+    /* File Input */
+    input[type="file"]{padding:0.75rem;border:2px dashed #d0d0d0;border-radius:8px;background:#fafafa;cursor:pointer;transition:all 0.3s ease}
+    input[type="file"]:hover{border-color:#667eea;background:#f0f4ff}
+    
+    /* Submit Button */
+    .submit-wrapper{text-align:center;margin-top:2rem}
+    input[type="submit"]{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;padding:1rem 3.5rem;font-size:1.1rem;font-weight:700;border-radius:50px;cursor:pointer;transition:all 0.3s ease;text-transform:uppercase;letter-spacing:1px}
+    input[type="submit"]:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(102,126,234,0.5)}
+    input[type="submit"]:active{transform:translateY(-1px)}
+    
+    /* Footer */
+    footer{text-align:center;color:#fff;padding:1.5rem;opacity:0.8;font-size:0.9rem}
+    
+    /* Animations */
+    @keyframes slideDown{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes fadeInUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+    
+    /* Responsive Breakpoints */
+    @media(min-width:600px){
+      .row{grid-template-columns:repeat(2,1fr)}
+      .media-grid{grid-template-columns:1fr 1fr;align-items:end}
+    }
+    @media(min-width:900px){
+      header h1{font-size:2.8rem}
+      .row{grid-template-columns:repeat(3,1fr)}
+      .section-title{font-size:1.8rem}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Upcoming Tech Summit — Register Now</h1>
+    <p>Join us for an exciting day of talks, networking, and hands-on workshops with industry experts.</p>
+  </header>
+
+  <main class="container">
+    <!-- Media Section -->
+    <h2 class="section-title">Event Highlights</h2>
+    <section class="media-section">
+      <!-- Banner Image -->
+      <div class="banner-wrapper">
+        <a href="https://www.fbcmarshville.org/event-registration/" target="_blank" class="banner-link" title="Click to learn more about event registration">
+          <img src="download.jpeg" alt="Tech Summit banner showing speakers and date" />
+        </a>
+      </div>
+
+      <!-- Video & Audio Grid -->
+      <div class="media-grid">
+        <div class="media-item">
+          <label for="promo-video">Promotional Video</label>
+          <video id="promo-video" controls preload="metadata">
+            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+            Your browser does not support the video element.
+          </video>
+        </div>
+
+        <div class="media-item">
+          <label for="intro-audio">Event Intro Audio</label>
+          <audio id="intro-audio" controls preload="none">
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+      </div>
+    </section>
+
+    <!-- Registration Form -->
+    <section>
+      <form action="#" method="post" enctype="multipart/form-data" novalidate="false">
+        <h2>Event Registration</h2>
+        
+        <!-- Basic Info Row -->
+        <div class="row">
+          <div class="form-group">
+            <label for="name">Full Name <span style="color:#e74c3c">*</span></label>
+            <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address <span style="color:#e74c3c">*</span></label>
+            <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="date">Attendance Date <span style="color:#e74c3c">*</span></label>
+            <input type="date" id="date" name="date" required>
+          </div>
+        </div>
+
+        <!-- Ticket Type -->
+        <fieldset>
+          <legend>Ticket Type</legend>
+          <div class="radio-group">
+            <label><input type="radio" name="ticket" value="standard" checked> Standard (Free)</label>
+            <label><input type="radio" name="ticket" value="vip"> VIP ($99)</label>
+          </div>
+        </fieldset>
+
+        <!-- Preferred Track -->
+        <div class="form-group">
+          <label for="track">Preferred Track</label>
+          <select id="track" name="track">
+            <option value="" disabled>-- Select a track --</option>
+            <option value="dev" selected>Development</option>
+            <option value="ds">Data Science</option>
+            <option value="sec">Security</option>
+          </select>
+        </div>
+
+        <!-- Notes -->
+        <div class="form-group">
+          <label for="notes">Notes / Requirements</label>
+          <textarea id="notes" name="notes" rows="4" placeholder="Dietary needs, accessibility requirements, questions, etc."></textarea>
+        </div>
+
+        <!-- File Upload -->
+        <div class="form-group">
+          <label for="file">Upload ID (Image or PDF)</label>
+          <input type="file" id="file" name="file" accept="image/*,application/pdf">
+        </div>
+
+        <!-- Submit -->
+        <div class="submit-wrapper">
+          <input type="submit" value="Register Now">
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Tech Summit. All rights reserved.</p>
+  </footer>
+</body>
+</html>
